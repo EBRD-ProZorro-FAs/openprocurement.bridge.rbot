@@ -1,0 +1,8 @@
+[run]
+source = openprocurement.bridge.rbot
+
+[report]
+omit =
+    *tests*
+    *.env*
+show_missing = True

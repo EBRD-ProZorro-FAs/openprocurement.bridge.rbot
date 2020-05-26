@@ -1,0 +1,74 @@
+{
+    "data": {
+        "procurementMethod": "open",
+        "numberOfBids": 0,
+        "mainProcurementCategory": "goods",
+        "enquiryPeriod": {
+            "startDate": "2019-08-22T11:20:33.252730+03:00",
+            "endDate": "2019-08-22T13:00:00+03:00"
+        },
+        "submissionMethod": "electronicAuction",
+        "procuringEntity": {
+            "contactPoint": {
+                "telephone": "+380681234567",
+                "name": "Григорій Смакуйсало",
+                "email": "grand.salo@eat.te.ua"
+            },
+            "identifier": {
+                "scheme": "UA-EDR",
+                "id": "123456789",
+                "legalName": "Defenders LLC"
+            },
+            "name": "Defenders LLC",
+            "kind": "general",
+            "address": {
+                "postalCode": "48010",
+                "countryName": "Україна",
+                "streetAddress": "Степана Бандери, 191",
+                "region": "Тернопільска область",
+                "locality": "Тернопіль"
+            }
+        },
+        "profile": "655360-30230000-889652-40000777",
+        "owner": "g.market",
+        "id": "db7511d1a0ec49628f44e89795735588",
+        "description": "Добрі монітори, в які хочеться дивитись.",
+        "title": "Добрі монітори",
+        "tenderID": "UA-2019-08-22-000025-c",
+        "guarantee": {
+            "currency": "UAH",
+            "amount": 0.0
+        },
+        "dateModified": "2019-08-22T14:02:42.176538+03:00",
+        "status": "draft.publishing",
+        "tenderPeriod": {
+            "startDate": "2019-08-22T13:00:00+03:00",
+            "endDate": "2019-08-22T14:00:00+03:00"
+        },
+        "procurementMethodType": "priceQuotation",
+        "date": "2019-08-22T14:02:42.176538+03:00",
+        "items": [{
+            "description": "Добрі монітори, добродіям",
+            "deliveryAddress": {
+                "countryName": "Україна",
+                "region": "Тернопільська область"
+            },
+            "deliveryDate": {
+                "endDate": "2019-08-24T00:00:00+03:00"
+            },
+            "id": "f6639e3ca222426d9a71c29b90fd5bce",
+            "quantity": 4.0
+        }],
+        "value": {
+            "currency": "UAH",
+            "amount": 4500.0,
+            "valueAddedTaxIncluded": false
+        },
+        "minimalStep": {
+            "currency": "UAH",
+            "amount": 1.0,
+            "valueAddedTaxIncluded": false
+        },
+        "awardCriteria": "lowestCost"
+    }
+}

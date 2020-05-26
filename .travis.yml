@@ -1,0 +1,23 @@
+language: python
+sudo: required
+group: deprecated-2017Q4
+python:
+  - "2.7"
+env:
+  global:
+    - TZ=Europe/Kiev
+  matrix:
+    - SANDBOX_MODE=
+    - SANDBOX_MODE=True
+cache:
+  directories:
+    - eggs
+before_install:
+  - sh bootstrap.sh
+install:
+  - bin/buildout -N
+  - bin/develop up --force
+script:
+  - bin/py.test openprocurement/bridge/pricequotation/tests/ --cov=openprocurement/bridge/pricequotation
+after_success:
+  - bin/coveralls
