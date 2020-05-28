@@ -22,8 +22,12 @@ docs_requires = requires + [
 
 entry_points = {
     'openprocurement.bridge.basic.handlers': [
-        'rBot = openprocurement.bridge.rbot.handlers:RBot',
-    ]
+        'rBot = openprocurement.bridge.rbot.handlers:RendererBot',
+    ],
+    'openprocurement.bridge.basic.filter_plugins': [
+        'statuslist = openprocurement.bridge.rbot.filters:Statuslist'
+    ],
+
 }
 
 here = os.path.abspath(os.path.dirname(__file__))
