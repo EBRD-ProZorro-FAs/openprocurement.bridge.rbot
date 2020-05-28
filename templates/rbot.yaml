@@ -28,7 +28,7 @@ main:
       # ігнорується в контрактинг/РУ
       bulk_save_interval: 0.5
       # конфігурація для хендлера renderer бота
-o      handler_rBot:
+      handler_rBot:
         output_resource: tenders
         # Е-Каталог АРІ сервер
         catalogue_api_server: ${options['catalogue_api_server']}
