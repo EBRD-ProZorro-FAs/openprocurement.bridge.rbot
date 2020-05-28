@@ -1,74 +1,317 @@
 {
     "data": {
         "procurementMethod": "open",
-        "numberOfBids": 0,
+        "status": "active.awarded",
+        "documents": [
+            {
+                "hash": "md5:04951bc3f8e3fe51a37912dda2665f76",
+                "format": "application/pkcs7-signature",
+                "url": "https://public.docs.openprocurement.org/get/940de573f6d44e639c1b592672dec3c0?KeyID=52462340&Signature=Lvq2amp3b64NBAOGLEkax64WoprseL1cwPqRQ5g9KS2LNHb8XgqWkHDB0BA8UQyRSGCvsXNqJ9D7dNVi7Ne%2FCw%253D%253D",
+                "title": "sign.p7s",
+                "documentOf": "tender",
+                "datePublished": "2020-05-08T12:29:57.154151+03:00",
+                "dateModified": "2020-05-08T12:29:57.154185+03:00",
+                "relatedItem": "b7bf55c6a01a4c8d9eb3b24053f7118b",
+                "id": "42e3c31bfb0e4bdf80d42d57f75df019"
+            },
+            {
+                "hash": "md5:be3043b945a94d0e9f3f9b8b38596ee9",
+                "format": "application/pdf",
+                "url": "https://public.docs.openprocurement.org/get/940de573f6d44e639c1b592672dec3c0?KeyID=52462340&Signature=Lvq2amp3b64NBAOGLEkax64WoprseL1cwPqRQ5g9KS2LNHb8XgqWkHDB0BA8UQyRSGCvsXNqJ9D7dNVi7Ne%2FCw%253D%253D",
+                "title": "proforma.pdf",
+                "documentType": "contractProforma",
+                "templateId": "paper0000001",
+                "documentOf": "tender",
+                "datePublished": "2020-05-08T12:29:57.154151+03:00",
+                "dateModified": "2020-05-08T12:29:57.154185+03:00",
+                "relatedItem": "b7bf55c6a01a4c8d9eb3b24053f7118b",
+                "id": "d434bb879df84d0d92e81d69e6797e5c"
+            },
+            {
+                "hash": "md5:ff5cd6aa9e1944329f9aa43c10ec9041",
+                "format": "application/msword",
+                "url": "https://public.docs.openprocurement.org/get/940de573f6d44e639c1b592672dec3c0?KeyID=52462340&Signature=Lvq2amp3b64NBAOGLEkax64WoprseL1cwPqRQ5g9KS2LNHb8XgqWkHDB0BA8UQyRSGCvsXNqJ9D7dNVi7Ne%2FCw%253D%253D",
+                "title": "paper0000001.docx",
+                "documentType": "contractTemplate",
+                "documentOf": "document",
+                "datePublished": "2020-05-08T12:29:57.154151+03:00",
+                "dateModified": "2020-05-08T12:29:57.154185+03:00",
+                "relatedItem": "d434bb879df84d0d92e81d69e6797e5c",
+                "id": "2c03a885f95f4ba1a881046065b1e0c6"
+            },
+            {
+                "hash": "md5:4323daba05f349a78d10532ccd6dbd8b",
+                "format": "application/json",
+                "url": "https://public.docs.openprocurement.org/get/940de573f6d44e639c1b592672dec3c0?KeyID=52462340&Signature=Lvq2amp3b64NBAOGLEkax64WoprseL1cwPqRQ5g9KS2LNHb8XgqWkHDB0BA8UQyRSGCvsXNqJ9D7dNVi7Ne%2FCw%253D%253D",
+                "title": "paper0000001-scheme.json",
+                "documentType": "contractScheme",
+                "documentOf": "document",
+                "datePublished": "2020-05-08T12:29:57.154151+03:00",
+                "dateModified": "2020-05-08T12:29:57.154185+03:00",
+                "relatedItem": "d434bb879df84d0d92e81d69e6797e5c",
+                "id": "f24dad95e907461a994ffc37996aa877"
+            },
+            {
+                "hash": "md5:38edb00819634fae88005ebc99cec478",
+                "format": "application/json",
+                "url": "https://public.docs.openprocurement.org/get/940de573f6d44e639c1b592672dec3c0?KeyID=52462340&Signature=Lvq2amp3b64NBAOGLEkax64WoprseL1cwPqRQ5g9KS2LNHb8XgqWkHDB0BA8UQyRSGCvsXNqJ9D7dNVi7Ne%2FCw%253D%253D",
+                "title": "paper0000001-form.json",
+                "documentType": "contractForm",
+                "documentOf": "document",
+                "datePublished": "2020-05-08T12:29:57.154151+03:00",
+                "dateModified": "2020-05-08T12:29:57.154185+03:00",
+                "relatedItem": "d434bb879df84d0d92e81d69e6797e5c",
+                "id": "1ddd7b2adcc34cb3955ff5f25cf6cb99"
+            },
+            {
+                "hash": "md5:9057895669904da39e7ec05df540f371",
+                "format": "application/json",
+                "url": "https://public.docs.openprocurement.org/get/940de573f6d44e639c1b592672dec3c0?KeyID=52462340&Signature=Lvq2amp3b64NBAOGLEkax64WoprseL1cwPqRQ5g9KS2LNHb8XgqWkHDB0BA8UQyRSGCvsXNqJ9D7dNVi7Ne%2FCw%253D%253D",
+                "title": "buyerContractData.json",
+                "documentType": "contractData",
+                "documentOf": "document",
+                "datePublished": "2020-05-08T12:29:57.154151+03:00",
+                "dateModified": "2020-05-08T12:29:57.154185+03:00",
+                "relatedItem": "d434bb879df84d0d92e81d69e6797e5c",
+                "id": "98983a018ad64382bf3acbfe6b0b6df0"
+            }
+        ],
         "mainProcurementCategory": "goods",
-        "enquiryPeriod": {
-            "startDate": "2019-08-22T11:20:33.252730+03:00",
-            "endDate": "2019-08-22T13:00:00+03:00"
+        "description": "Папір ксероксний",
+        "title": "ДК 021:2015 \"30190000-7 - Офісне устаткування та приладдя різне\" (бумага) \n",
+        "bids": [{
+            "tenderers": [{
+                "scale": "mid",
+                "contactPoint": {
+                    "name": "Демянович М.М",
+                    "telephone": "+380661401133"
+                },
+                "identifier": {
+                    "scheme": "UA-EDR",
+                    "id": "2920707533",
+                    "legalName": "ДЕМЯНОВИЧ МИКОЛА МИКОЛАЙОВИЧ"
+                },
+                "name": "ДЕМЯНОВИЧ МИКОЛА МИКОЛАЙОВИЧ",
+                "address": {
+                    "postalCode": "27100",
+                    "countryName": "Україна",
+                    "streetAddress": "ВУЛИЦЯ ЛОМОНОСОВА будинок 7",
+                    "region": "Кіровоградська область",
+                    "locality": "місто Новоукраїнка"
+                }
+            }],
+            "date": "2020-05-08T13:35:33.792967+03:00",
+            "id": "b59025d16c02417baad247da44093572",
+            "status": "active",
+            "documents":[{
+                "hash": "md5:bcb5dfdaddb745e0bd369398bd7ee63a",
+                "format": "application/json",
+                "url": "https://public.docs.openprocurement.org/get/940de573f6d44e639c1b592672dec3c0?KeyID=52462340&Signature=Lvq2amp3b64NBAOGLEkax64WoprseL1cwPqRQ5g9KS2LNHb8XgqWkHDB0BA8UQyRSGCvsXNqJ9D7dNVi7Ne%2FCw%253D%253D",
+                "title": "supplierContractData.json",
+                "documentType": "contractData",
+                "documentOf": "document",
+                "datePublished": "2020-05-08T12:29:57.154151+03:00",
+                "dateModified": "2020-05-08T12:29:57.154185+03:00",
+                "relatedItem": "d434bb879df84d0d92e81d69e6797e5c",
+                "id": "e2327755c850461eb7fd7ad692506ea2"
+            }],
+            "value": {
+                "amount": 450,
+                "currency": "USD"
+            }
+        }],
+        "contracts": [{
+            "status": "pending",
+            "documents": [{
+                    "hash": "md5:72235e60d423cb5849b533452666c004",
+                    "format": "application/pdf",
+                    "url": "https://public.docs.openprocurement.org/get/c68710ecd6f342b2bd00c9b4656a1139?KeyID=52462340&Signature=mfTkzSa0BgoSJ9fA68UiDg2nnVJcgAV2xJv4l5pZRnc%252BNpdo9BQQBqDu7So9aRzQHmsYowaNY2Oc%252B0Z95%2F50Dw%253D%253D",
+                    "title": "261.pdf",
+                    "documentOf": "tender",
+                    "datePublished": "2020-05-08T12:31:24.305298+03:00",
+                    "documentType": "contractSigned",
+                    "dateModified": "2020-05-08T12:31:24.305331+03:00",
+                    "id": "8211ab77ca374f8d9c5c658ae9507eb7"
+                },
+                {
+                    "hash": "md5:9bb0fd7e1a2fdb43970259ecd07a1f57",
+                    "format": "application/pkcs7-signature",
+                    "url": "https://public.docs.openprocurement.org/get/1464959a023642d6b8a0003a5e49dc5f?KeyID=52462340&Signature=q2rFidgIzD%252BcNY%252BD90ZdAwQJtX%252BTwmMxgpFy7DZamO%2FaK9Ju2RkcUISvdHXIeoSXHvpP7qkudMDyYVSYvRNCBw%253D%253D",
+                    "title": "sign.p7s",
+                    "documentOf": "tender",
+                    "datePublished": "2020-05-08T12:32:19.752444+03:00",
+                    "dateModified": "2020-05-08T12:32:19.752480+03:00",
+                    "id": "6a34ac288afc49769ed92c218b004c40"
+                },
+                {
+                    "hash": "md5:a565e79ab3ad46ccbf683ab9dd1e39cc",
+                    "format": "application/json",
+                    "url": "https://public.docs.openprocurement.org/get/940de573f6d44e639c1b592672dec3c0?KeyID=52462340&Signature=Lvq2amp3b64NBAOGLEkax64WoprseL1cwPqRQ5g9KS2LNHb8XgqWkHDB0BA8UQyRSGCvsXNqJ9D7dNVi7Ne%2FCw%253D%253D",
+                    "title": "contractData.json",
+                    "documentType": "contractData",
+                    "documentOf": "document",
+                    "datePublished": "2020-05-08T12:29:57.154151+03:00",
+                    "dateModified": "2020-05-08T12:29:57.154185+03:00",
+                    "relatedItem": "d434bb879df84d0d92e81d69e6797e5c",
+                    "id": "fff6092eeb1d4409837f664ae38ea4f3"
+                }
+            ],
+            "items": [{
+                "description": "Бумага",
+                "classification": {
+                    "scheme": "ДК021",
+                    "description": "Офісне устаткування та приладдя різне",
+                    "id": "30190000-7"
+                },
+                "deliveryAddress": {
+                    "postalCode": "27100",
+                    "countryName": "Україна",
+                    "streetAddress": "пров. Лікарняний 1 ",
+                    "region": "Кіровоградська область",
+                    "locality": "м. Новоукараїнка"
+                },
+                "deliveryDate": {
+                    "startDate": "2020-05-08T00:00:00+03:00",
+                    "endDate": "2020-05-12T00:00:00+03:00"
+                },
+                "id": "9ea3449772ff47289b1168edf8b4dd59",
+                "unit": {
+                    "code": "NMP",
+                    "name": "пачок",
+                    "value": {
+                        "currency": "UAH",
+                        "amount": 0,
+                        "valueAddedTaxIncluded": false
+                    }
+                },
+                "quantity": 25
+            }],
+            "suppliers": [{
+                "scale": "mid",
+                "contactPoint": {
+                    "name": "Демянович М.М",
+                    "telephone": "+380661401133"
+                },
+                "identifier": {
+                    "scheme": "UA-EDR",
+                    "id": "2920707533",
+                    "legalName": "ДЕМЯНОВИЧ МИКОЛА МИКОЛАЙОВИЧ"
+                },
+                "name": "ДЕМЯНОВИЧ МИКОЛА МИКОЛАЙОВИЧ",
+                "address": {
+                    "postalCode": "27100",
+                    "countryName": "Україна",
+                    "streetAddress": "ВУЛИЦЯ ЛОМОНОСОВА будинок 7",
+                    "region": "Кіровоградська область",
+                    "locality": "місто Новоукраїнка"
+                }
+            }],
+            "contractNumber": "261",
+            "period": {
+                "startDate": "2020-05-08T00:00:00+03:00",
+                "endDate": "2020-12-31T00:00:00+02:00"
+            },
+            "dateSigned": "2020-05-08T12:30:00+03:00",
+            "value": {
+                "currency": "UAH",
+                "amount": 2500,
+                "amountNet": 2500,
+                "valueAddedTaxIncluded": false
+            },
+            "date": "2020-05-08T12:32:42.392747+03:00",
+            "awardID": "2b9532b89cb34a6fa60629ba57528e0d",
+            "id": "6d0ba74771bd4b4493e2d56e31af9055",
+            "contractID": "UA-2020-05-08-002276-b-b1"
+        }],
+        "items": [{
+            "description": "Бумага",
+            "classification": {
+                "scheme": "ДК021",
+                "description": "Офісне устаткування та приладдя різне",
+                "id": "30190000-7"
+            },
+            "deliveryAddress": {
+                "postalCode": "27100",
+                "countryName": "Україна",
+                "streetAddress": "пров. Лікарняний 1 ",
+                "region": "Кіровоградська область",
+                "locality": "м. Новоукараїнка"
+            },
+            "deliveryDate": {
+                "startDate": "2020-05-08T00:00:00+03:00",
+                "endDate": "2020-05-12T00:00:00+03:00"
+            },
+            "id": "9ea3449772ff47289b1168edf8b4dd59",
+            "unit": {
+                "code": "NMP",
+                "name": "пачок"
+            },
+            "quantity": 25
+        }],
+        "procurementMethodType": "belowThreshold",
+        "value": {
+            "currency": "UAH",
+            "amount": 2500,
+            "valueAddedTaxIncluded": false
         },
-        "submissionMethod": "electronicAuction",
+        "id": "b7bf55c6a01a4c8d9eb3b24053f7118b",
         "procuringEntity": {
             "contactPoint": {
-                "telephone": "+380681234567",
-                "name": "Григорій Смакуйсало",
-                "email": "grand.salo@eat.te.ua"
+                "telephone": "+380664376747",
+                "name": "Валентина Колпак",
+                "email": "centr_novoukr_buh@ukr.net"
             },
             "identifier": {
                 "scheme": "UA-EDR",
-                "id": "123456789",
-                "legalName": "Defenders LLC"
+                "id": "36734786",
+                "legalName": "Комунальне некомерційне підприємство \"Центр первинної медико-санітарної допомоги\" Новоукраїнської районної ради"
             },
-            "name": "Defenders LLC",
+            "name": "Комунальне некомерційне підприємство \"Центр первинної медико-санітарної допомоги\" Новоукраїнської районної ради",
             "kind": "general",
             "address": {
-                "postalCode": "48010",
+                "postalCode": "27100",
                 "countryName": "Україна",
-                "streetAddress": "Степана Бандери, 191",
-                "region": "Тернопільска область",
-                "locality": "Тернопіль"
+                "streetAddress": "пров. Лікарняний, буд. 1",
+                "region": "Кіровоградська область",
+                "locality": "м. Новоукраїнка"
             }
         },
-        "profile": "655360-30230000-889652-40000777",
-        "owner": "g.market",
-        "id": "db7511d1a0ec49628f44e89795735588",
-        "description": "Добрі монітори, в які хочеться дивитись.",
-        "title": "Добрі монітори",
-        "tenderID": "UA-2019-08-22-000025-c",
-        "guarantee": {
-            "currency": "UAH",
-            "amount": 0.0
-        },
-        "dateModified": "2019-08-22T14:02:42.176538+03:00",
-        "status": "draft.publishing",
-        "tenderPeriod": {
-            "startDate": "2019-08-22T13:00:00+03:00",
-            "endDate": "2019-08-22T14:00:00+03:00"
-        },
-        "procurementMethodType": "priceQuotation",
-        "date": "2019-08-22T14:02:42.176538+03:00",
-        "items": [{
-            "description": "Добрі монітори, добродіям",
-            "deliveryAddress": {
-                "countryName": "Україна",
-                "region": "Тернопільська область"
-            },
-            "deliveryDate": {
-                "endDate": "2019-08-24T00:00:00+03:00"
-            },
-            "id": "f6639e3ca222426d9a71c29b90fd5bce",
-            "quantity": 4.0
+        "owner": "prom.ua",
+        "awards": [{
+            "status": "active",
+            "date": "2020-05-08T12:29:57.379503+03:00",
+            "suppliers": [{
+                "scale": "mid",
+                "contactPoint": {
+                    "name": "Демянович М.М",
+                    "telephone": "+380661401133"
+                },
+                "identifier": {
+                    "scheme": "UA-EDR",
+                    "id": "2920707533",
+                    "legalName": "ДЕМЯНОВИЧ МИКОЛА МИКОЛАЙОВИЧ"
+                },
+                "name": "ДЕМЯНОВИЧ МИКОЛА МИКОЛАЙОВИЧ",
+                "address": {
+                    "postalCode": "27100",
+                    "countryName": "Україна",
+                    "streetAddress": "ВУЛИЦЯ ЛОМОНОСОВА будинок 7",
+                    "region": "Кіровоградська область",
+                    "locality": "місто Новоукраїнка"
+                }
+            }],
+            "id": "2b9532b89cb34a6fa60629ba57528e0d",
+            "value": {
+                "currency": "UAH",
+                "amount": 2500,
+                "valueAddedTaxIncluded": false
+            }
         }],
-        "value": {
-            "currency": "UAH",
-            "amount": 4500.0,
-            "valueAddedTaxIncluded": false
-        },
-        "minimalStep": {
-            "currency": "UAH",
-            "amount": 1.0,
-            "valueAddedTaxIncluded": false
-        },
-        "awardCriteria": "lowestCost"
+        "tenderID": "UA-2020-05-08-002276-b",
+        "date": "2020-05-08T12:32:42.392747+03:00",
+        "dateModified": "2020-05-08T12:32:42.392747+03:00",
+        "plans": [{
+            "id": "9ec058409b8349bc915ee74f564a2866"
+        }]
     }
 }

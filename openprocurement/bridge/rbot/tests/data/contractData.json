@@ -1,0 +1,204 @@
+{
+    "procurementMethod": "limited",
+    "status": "complete",
+    "mainProcurementCategory": "goods",
+    "description": "Папір ксероксний",
+    "title": "ДК 021:2015 \"30190000-7 - Офісне устаткування та приладдя різне\" (бумага)",
+    "buyer": {
+        "bankAccount": {
+            "accountIdentification": [
+                {
+                    "scheme": "IBAN",
+                    "id": "UA843235830000026002052930338"
+                }
+            ]
+        },
+        "signatory": {
+            "name": "Фортинська Валентина Володимирівна",
+            "genetiveName": "Фортинської Валентини Володимирівної",
+            "position": "головний лікар",
+            "genetivePosition": "головного лікаря",
+            "authorityDocument": "наказ №123 від 10.10.2010р.",
+            "genetiveAuthorityDocument": "наказу №123 від 10.10.2010р."
+        },
+        "taxationMode": "не є платником ПДВ"
+    },
+    "supplier": {
+        "bankAccount": {
+            "accountIdentification": [
+                {
+                    "scheme": "IBAN",
+                    "id": "UA843235830000026001052902709"
+                }
+            ]
+        },
+        "signatory": {
+            "name": "Демянович Микола Миколайович",
+            "genetiveName": "Демяновича Миколи Миколайовича",
+            "position": "директор",
+            "genetivePosition": "директора",
+            "authorityDocument": "свідоцтво № 518622 про державну реєстрацію суб’єкта підприємницької діяльності, виданого виконкомом Новоукраїнської міської ради м.Новоукраїнки",
+            "genetiveAuthorityDocument": "свідоцтва № 518622 про державну реєстрацію суб’єкта підприємницької діяльності, виданого виконкомом Новоукраїнської міської ради м.Новоукраїнки"
+        },
+        "taxationMode": "не є платником ПДВ"
+    },
+    "contract":{
+        "status": "active",
+        "items": [{
+            "description": "Бумага",
+            "classification": {
+                "scheme": "ДК021",
+                "description": "Офісне устаткування та приладдя різне",
+                "id": "30190000-7"
+            },
+            "deliveryAddress": {
+                "postalCode": "27100",
+                "countryName": "Україна",
+                "streetAddress": "пров. Лікарняний 1 ",
+                "region": "Кіровоградська область",
+                "locality": "м. Новоукараїнка"
+            },
+            "deliveryDate": {
+                "startDate": "2020-05-08T00:00:00+03:00",
+                "endDate": "2020-05-12T00:00:00+03:00"
+            },
+            "id": "9ea3449772ff47289b1168edf8b4dd59",
+            "unit": {
+                "code": "NMP",
+                "name": "пачок",
+                "value": {
+                    "currency": "UAH",
+                    "amount": 100,
+                    "valueAddedTaxIncluded": false
+                }
+            },
+            "quantity": 25
+        }],
+        "supplier": {
+            "scale": "mid",
+            "contactPoint": {
+                "name": "Демянович М.М",
+                "telephone": "+380661401133"
+            },
+            "identifier": {
+                "scheme": "UA-EDR",
+                "id": "2920707533",
+                "legalName": "ДЕМЯНОВИЧ МИКОЛА МИКОЛАЙОВИЧ"
+            },
+            "name": "ДЕМЯНОВИЧ МИКОЛА МИКОЛАЙОВИЧ",
+            "address": {
+                "postalCode": "27100",
+                "countryName": "Україна",
+                "streetAddress": "ВУЛИЦЯ ЛОМОНОСОВА будинок 7",
+                "region": "Кіровоградська область",
+                "locality": "місто Новоукраїнка"
+            }
+        },
+        "contractNumber": "261",
+        "period": {
+            "startDate": "2020-05-08T00:00:00+03:00",
+            "endDate": "2020-12-31T00:00:00+02:00"
+        },
+        "dateSigned": "2020-05-08T12:30:00+03:00",
+        "value": {
+            "currency": "UAH",
+            "amount": 2500,
+            "amountNet": 2500,
+            "valueAddedTaxIncluded": false
+        },
+        "date": "2020-05-08T12:32:42.392747+03:00",
+        "awardID": "2b9532b89cb34a6fa60629ba57528e0d",
+        "id": "6d0ba74771bd4b4493e2d56e31af9055",
+        "contractID": "UA-2020-05-08-002276-b-b1"
+    },
+    "items": [{
+        "description": "Бумага",
+        "classification": {
+            "scheme": "ДК021",
+            "description": "Офісне устаткування та приладдя різне",
+            "id": "30190000-7"
+        },
+        "deliveryAddress": {
+            "postalCode": "27100",
+            "countryName": "Україна",
+            "streetAddress": "пров. Лікарняний 1 ",
+            "region": "Кіровоградська область",
+            "locality": "м. Новоукараїнка"
+        },
+        "deliveryDate": {
+            "startDate": "2020-05-08T00:00:00+03:00",
+            "endDate": "2020-05-12T00:00:00+03:00"
+        },
+        "id": "9ea3449772ff47289b1168edf8b4dd59",
+        "unit": {
+            "code": "NMP",
+            "name": "пачок"
+        },
+        "quantity": 25
+    }],
+    "procurementMethodType": "reporting",
+    "value": {
+        "currency": "UAH",
+        "amount": 2500,
+        "valueAddedTaxIncluded": false
+    },
+    "id": "b7bf55c6a01a4c8d9eb3b24053f7118b",
+    "procuringEntity": {
+        "contactPoint": {
+            "telephone": "+380664376747",
+            "name": "Валентина Колпак",
+            "email": "centr_novoukr_buh@ukr.net"
+        },
+        "identifier": {
+            "scheme": "UA-EDR",
+            "id": "36734786",
+            "legalName": "Комунальне некомерційне підприємство \"Центр первинної медико-санітарної допомоги\" Новоукраїнської районної ради"
+        },
+        "name": "Комунальне некомерційне підприємство \"Центр первинної медико-санітарної допомоги\" Новоукраїнської районної ради",
+        "kind": "general",
+        "address": {
+            "postalCode": "27100",
+            "countryName": "Україна",
+            "streetAddress": "пров. Лікарняний, буд. 1",
+            "region": "Кіровоградська область",
+            "locality": "м. Новоукраїнка"
+        }
+    },
+    "owner": "prom.ua",
+    "awards": [{
+        "status": "active",
+        "date": "2020-05-08T12:29:57.379503+03:00",
+        "suppliers": [{
+            "scale": "mid",
+            "contactPoint": {
+                "name": "Демянович М.М",
+                "telephone": "+380661401133"
+            },
+            "identifier": {
+                "scheme": "UA-EDR",
+                "id": "2920707533",
+                "legalName": "ДЕМЯНОВИЧ МИКОЛА МИКОЛАЙОВИЧ"
+            },
+            "name": "ДЕМЯНОВИЧ МИКОЛА МИКОЛАЙОВИЧ",
+            "address": {
+                "postalCode": "27100",
+                "countryName": "Україна",
+                "streetAddress": "ВУЛИЦЯ ЛОМОНОСОВА будинок 7",
+                "region": "Кіровоградська область",
+                "locality": "місто Новоукраїнка"
+            }
+        }],
+        "id": "2b9532b89cb34a6fa60629ba57528e0d",
+        "value": {
+            "currency": "UAH",
+            "amount": 2500,
+            "valueAddedTaxIncluded": false
+        }
+    }],
+    "tenderID": "UA-2020-05-08-002276-b",
+    "date": "2020-05-08T12:32:42.392747+03:00",
+    "dateModified": "2020-05-08T12:32:42.392747+03:00",
+    "plans": [{
+        "id": "9ec058409b8349bc915ee74f564a2866"
+    }]
+}
