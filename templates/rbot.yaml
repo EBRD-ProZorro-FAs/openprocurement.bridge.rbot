@@ -1,7 +1,6 @@
 main:
-    # список обробників зазвичай імя відповідає tender.procurementMethodType, можливі значення `pqSecondPhaseCommit`
     handlers:
-      - rBot
+      - common
     worker_config:
       # тип воркера може бути contracting для контрактингу і РУ або  edge цей ключ задає поведінку обробки
       # для отриманих обєктів.
@@ -29,11 +28,13 @@ main:
       bulk_save_interval: 0.5
       # конфігурація для хендлера renderer бота
       handler_rBot:
+        resource: tenders
+        public_resources_api_server: http://api.edge-prod-hw.office.quintagroup.com
+        resources_api_server: http://api.edge-prod-hw.office.quintagroup.com
+        resources_api_version: 2.5
+        resources_api_token:
         output_resource: tenders
-        # Е-Каталог АРІ сервер
-        catalogue_api_server: ${options['catalogue_api_server']}
-        # Весрія API E-Каталога
-        catalogue_api_version: ${options['catalogue_api_version']}
+        webrenderer_url: http://localhost:8080
     coordinator_config:
       connection_url: ${options['coordinator_connection_url']}
       coordinator_name: ${options['coordinator_name']}
@@ -59,10 +60,14 @@ main:
     # Конфігурація для фільтру обєктів які будуть опрацьовуватись (задаються умови які мають бути істині)
     filter_config:
       # тип фільтру може бути jmespath для контрактинг/РУ
-      filter_type: jmespath
-      filters:
-        - {expression: "contains([`priceQuotation`], procurementMethodType)"}
-        - {expression: "contains([`draft.publishing`], status)"}
+      filter_type: contract_data
+      statusmap:
+        belowThreshold:
+          - active.enquiries
+          - active.awarded
+        common:
+          - active.tendering
+          - active.awarded
       # таймаут який фільтр чекатиме на обєкт в черзі
       timeout: 3
     # конфігурація для клієнту який слухає feed АРІ
@@ -124,49 +129,49 @@ main:
     # Вікно по якому визначається продуктивність клієнтів
     # ігнорується в контрактинг/РУ
     perfomance_window: 300
-  version: 1
+version: 1
 
-  formatters:
-    simple:
-      format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+formatters:
+  simple:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
-  handlers:
-    console:
-      class: logging.StreamHandler
-      level: INFO
-      formatter: json
-      stream: ext://sys.stdout
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: simple
+    stream: ext://sys.stdout
 
 {% if 'journal' in options and options['journal'] %}\
-  journal:
-    class: ExtendedJournalHandler.ExtendedJournalHandler
-    level: INFO
-    SYSLOG_IDENTIFIER: RBOT
+journal:
+  class: ExtendedJournalHandler.ExtendedJournalHandler
+  level: INFO
+  SYSLOG_IDENTIFIER: RBOT
 {% end %}
 
 {% if 'statsd' in options and options['statsd'] %}\
-  statsd:
-    level: DEBUG
-    class: statsdhandler.StatsdHandler
-    config_path: "${options['handler_config']}"
+statsd:
+  level: DEBUG
+  class: statsdhandler.StatsdHandler
+  config_path: "${options['handler_config']}"
 {% end %}
 
-  loggers:
-    openprocurement.bridge.basic.databridge:
-      handlers: [console${',journal' if 'journal' in options and options['journal'] else ''}]
-      propagate: no
-      level: DEBUG
+loggers:
+  openprocurement.bridge.basic.databridge:
+    handlers: [console${',journal' if 'journal' in options and options['journal'] else ''}]
+    propagate: no
+    level: DEBUG
 
-    exc_logger:
-      handlers: [console${',journal' if 'journal' in options and options['journal'] else ''}]
-      propagate: no
-      level: ERROR
+  exc_logger:
+    handlers: [console${',journal' if 'journal' in options and options['journal'] else ''}]
+    propagate: no
+    level: ERROR
 
-    openprocurement_client.resources.sync:
-      handlers: [console${',journal' if 'journal' in options and options['journal'] else ''}]
-      propagate: no
-      level: INFO
+  openprocurement_client.resources.sync:
+    handlers: [console${',journal' if 'journal' in options and options['journal'] else ''}]
+    propagate: no
+    level: INFO
 
-    "":
-      handlers: [console${',journal' if 'journal' in options and options['journal'] else ''}]
-      level: DEBUG
+  "":
+    handlers: [console${',journal' if 'journal' in options and options['journal'] else ''}]
+    level: DEBUG

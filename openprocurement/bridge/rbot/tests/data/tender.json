@@ -44,7 +44,7 @@
                 "format": "application/json",
                 "url": "https://public.docs.openprocurement.org/get/940de573f6d44e639c1b592672dec3c0?KeyID=52462340&Signature=Lvq2amp3b64NBAOGLEkax64WoprseL1cwPqRQ5g9KS2LNHb8XgqWkHDB0BA8UQyRSGCvsXNqJ9D7dNVi7Ne%2FCw%253D%253D",
                 "title": "paper0000001-scheme.json",
-                "documentType": "contractScheme",
+                "documentType": "contractSchema",
                 "documentOf": "document",
                 "datePublished": "2020-05-08T12:29:57.154151+03:00",
                 "dateModified": "2020-05-08T12:29:57.154185+03:00",

@@ -1,0 +1,351 @@
+{
+  "$id": "https://example.com/person.schema.json",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Person",
+  "type": "object",
+  "properties": {
+    "role": {
+	"type": "string"
+    }
+  },
+    "allOf": [
+      {
+        "if": {
+          "properties": { "role": { "const": "process" } }
+        },
+        "then": {
+            "required": ["tender", "contract"],
+	    "additionalProperties": false,
+          "properties": {
+            "tender": {
+              "$ref": "#/definitions/tender"
+            },
+            "contract": {
+              "$ref": "#/definitions/contract"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": { "role": { "const": "buyer" } }
+        },
+        "then": {
+            "required": ["buyer", "bid", "supplier"],
+	    "additionalProperties": false,
+          "properties": {
+            "buyer": {
+              "$ref": "#/definitions/buyer"
+            },
+            "bid": {
+              "$ref": "#/definitions/bid"
+            },
+            "supplier": {
+              "$ref": "#/definitions/supplier"
+            }
+          }
+        }
+      },
+      {
+        "if": {
+          "properties": { "role": { "const": "supplier" } }
+        },
+        "then": {
+            "required": ["supplier", "bid"],
+	    "additionalProperties": false,
+          "properties": {
+            "supplier": {
+              "$ref": "#/definitions/supplier"
+            },
+            "bid": {
+              "$ref": "#/definitions/bid"
+            }
+          }
+        }
+      }
+    ],
+  "definitions": {
+    "tender": {
+      "type": "object",
+      "required": ["procuringEntity"],
+      "properties": {
+        "procuringEntity": {
+          "type": "object",
+          "required": ["name", "address", "identifier", "criteria"],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "address": {
+              "$ref": "#/definitions/address"
+            },
+            "identifier": {
+              "type": "object",
+              "required": ["id"],
+              "properties": {
+                "id": {
+                  "type": "string"
+                }
+              }
+            },
+            "criteria": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["title", "description"],
+                "properties": {
+                  "title": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "requirementGroups": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["description"],
+                      "properties": {
+                        "description": {
+                          "type": "string"
+                        },
+                        "requirements": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "required": ["title", "id", "unit"],
+                            "properties": {
+                              "title": {
+                                "type": "string"
+                              },
+                              "id": {
+                                "type": "string"
+                              },
+                              "unit": {
+                                "type": "object",
+                                "required": ["name"],
+                                "properties": {
+                                  "name": {
+                                    "type": "string"
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "contract": {
+      "type": "object",
+      "required": ["contractNumber", "dateSigned", "value", "suppliers", "items"],
+      "description": "The person's first name.",
+      "properties": {
+        "contractNumber": {
+            "type": "number"
+        },
+        "dateSigned": {
+          "type": "string"
+        },
+        "value": {
+          "type": "object",
+          "required": ["amount", "amountNet", "valueAddedTaxIncluded"],
+          "properties": {
+            "amount": {
+              "type": "number"
+            },
+            "amountNet": {
+              "type": "number"
+            },
+            "valueAddedTaxIncluded": {
+              "type": "boolean"
+            }
+          }
+        },
+        "suppliers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["name", "identifier", "address"],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "address": {
+                "$ref": "#/definitions/address"
+              },
+              "identifier": {
+                "type": "object",
+                "required": ["id"],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["description", "unit", "classification", "deliveryAddress", "quantity"],
+            "properties": {
+              "quantity": {
+                "type": "number"
+              },
+              "description": {
+                "type": "number"
+              },
+              "unit": {
+                "type": "object",
+                "required": ["name"],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "classification": {
+                "type": "object",
+                "required": ["id"],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              },
+              "deliveryAddress": {
+                "type": "object",
+                "required": ["countryName", "region", "locality", "streetAddress", "postalCode"],
+                "properties": {
+                  "countryName": {
+                    "type": "string"
+                  },
+                  "region": {
+                    "type": "string"
+                  },
+                  "locality": {
+                    "type": "string"
+                  },
+                  "streetAddress": {
+                    "type": "string"
+                  },
+                  "postalCode": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "buyer": {
+      "type": "object",
+      "required": ["signatory"],
+      "properties": {
+        "signatory": {
+          "$ref": "#/definitions/signatory"
+        }
+      }
+    },
+    "bid": {
+      "type": "object",
+      "properties": {
+        "requirementResponses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["value", "requirement"],
+            "properties": {
+              "value": {
+                "type": "string"
+              },
+              "requirement": {
+                "type": "object",
+                "required": ["id"],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "supplier": {
+      "type": "object",
+      "properties": {
+        "signatory": {
+          "$ref": "#/definitions/signatory"
+        }
+      }
+    },
+    "signatory": {
+      "type": "object",
+      "required": ["genetiveName", "genetiveAuthorityDocument", "position", "name", "bankAccount"],
+      "properties": {
+        "genetiveName": {
+          "type": "string"
+        },
+        "genetiveAuthorityDocument": {
+          "type": "string"
+        },
+        "position": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "bankAccount": {
+          "type": "object",
+          "properties": {
+            "accountIdentification": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["id"],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "address": {
+      "type": "object",
+      "required": ["region", "locality", "streetAddress", "postalCode"],
+      "properties": {
+        "region": {
+          "type": "string"
+        },
+        "locality": {
+          "type": "string"
+        },
+        "streetAddress": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

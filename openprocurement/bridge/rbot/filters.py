@@ -3,6 +3,7 @@ from gevent import monkey
 monkey.patch_all()
 
 import logging
+import jmespath
 
 from gevent import sleep
 from gevent.greenlet import Greenlet
@@ -18,7 +19,7 @@ INFINITY = True
 
 
 @implementer(IFilter)
-class StatuslistFilter(Greenlet):
+class ContractDataFilter(Greenlet):
 
     def __init__(self, conf, input_queue, filtered_queue, db):
         LOGGER.info("Init Contract Proforma Filter.")
@@ -31,8 +32,14 @@ class StatuslistFilter(Greenlet):
         self.resource = self.config['resource']
         self.resource_id = "{}_ID".format(self.resource[:-1]).upper()
 
-        self.statuslist = self.config['filter_config'].get('statuslist', [])
+        self.statusmap = self.config['filter_config'].get('statusmap', {})
         self.timeout = self.config['filter_config']['timeout']
+
+    def get_pmt_statuses(self, pmt):
+        return self.statusmap.get(
+            pmt,
+            self.statusmap.get('common', [])
+        )
 
     def _run(self):
         while INFINITY:
@@ -54,8 +61,10 @@ class StatuslistFilter(Greenlet):
                 continue
 
             status = resource['status']
+            procurement_type = resource['procurementMethodType']
+            statuses_to_process = self.get_pmt_statuses(procurement_type)
 
-            if status not in self.statuslist:
+            if status not in statuses_to_process:
                 LOGGER.info(
                     "Skipping {} {} {} {}".format(
                         resource['procurementMethodType'], self.resource[:-1],

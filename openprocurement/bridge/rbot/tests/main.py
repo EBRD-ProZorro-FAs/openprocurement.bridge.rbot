@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from openprocurement.bridge.pricequotation.tests import handlers, utils
+from openprocurement.bridge.rbot.tests import handlers, filters, render
 
 
 def suite():
     tests = unittest.TestSuite()
     tests.addTest(handlers.suite())
-    tests.addTest(utils.suite())
+    tests.addTest(filters.suite())
+    tests.addTest(render.suite())
     return tests
 
 

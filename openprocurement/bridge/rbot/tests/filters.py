@@ -16,7 +16,7 @@ CONFIG = {
 }
 
 
-class TestStutuslistFilter(unittest.TestCase):
+class TestStatuslistFilter(unittest.TestCase):
 
     def setUp(self):
         self.conf = CONFIG
@@ -95,6 +95,7 @@ class TestStutuslistFilter(unittest.TestCase):
 
 def suite():
     suite = unittest.TestSuite()
+    suite.addTest(unittest.makeSuite(TestStatuslistFilter))
     return suite
 
 

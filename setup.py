@@ -8,6 +8,9 @@ requires = [
     'openprocurement.bridge.basic',
     'tooz',
     'retrying',
+    'jmespath',
+    'enum',
+    'jsonschema',
 ]
 
 test_requires = requires + [
@@ -22,10 +25,10 @@ docs_requires = requires + [
 
 entry_points = {
     'openprocurement.bridge.basic.handlers': [
-        'rBot = openprocurement.bridge.rbot.handlers:RendererBot',
+        'common = openprocurement.bridge.rbot.handlers:RendererBot',
     ],
     'openprocurement.bridge.basic.filter_plugins': [
-        'statuslist = openprocurement.bridge.rbot.filters:Statuslist'
+        'contract_data = openprocurement.bridge.rbot.filters:ContractDataFilter'
     ],
 
 }
