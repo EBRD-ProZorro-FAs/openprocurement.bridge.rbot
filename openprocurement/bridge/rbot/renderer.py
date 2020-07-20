@@ -13,7 +13,9 @@ class HttpRenderer(object):
 
     def render(self, template, json_data, name=None):
         if name:
-            return self.session.post(self.base_url, data={'json_data': json.dumps(json_data)}, files={'template': (name, template)})
+            return self.session.post(self.base_url,
+                                     data={'json_data': json.dumps(json_data)},
+                                     files={'template': (name, template)})
         return self.session.post(
             self.base_url,
             data={

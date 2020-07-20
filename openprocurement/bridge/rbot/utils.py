@@ -43,10 +43,17 @@ def get_contract_proforma_documents(resource, related_item=None):
     return _get_documents(resource, 'contractProforma', related_item=None)
 
 
-def prepare_proforma_data(resource, buyer_data):
+def prepare_proforma_data(resource,
+                          buyer_data={},
+                          supplier_data={},
+                          bid_data={},
+                          contract_data={}):
     return {
         "tender": resource,
-        "buyer": buyer_data
+        "buyer": buyer_data,
+        "supplier": supplier_data,
+        "bid": bid_data,
+        "contract": contract_data
     }
 
 

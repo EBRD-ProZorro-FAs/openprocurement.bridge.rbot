@@ -221,14 +221,15 @@ class RendererBot(HandlerTemplate):
                 award = [a for a in resource.get('awards') if contract['awardID'] == a['id']][-1]
                 bid = [b for b in resource.get('bids') if b['id'] == award['bid_id']][-1]
                 supplier_data = self.get_document_content(bid, get_contract_data_documents)
-
-                # TODO: supplier and buyer data example? how to differentiate?
+                
+                # {"supplier": {}, "buyer": {}}
                 bid_and_supplier_data = self.get_document_content(
                     award, get_contract_data_documents
                 )
-                contract_data = merge_contract_data(buyer_data,
-                                                    supplier_data or {},
-                                                    bid_and_supplier_data or {})
+                contract_data = merge_contract_data(resource,
+                                                    buyer_data,
+                                                    supplier_data,
+                                                    bid_and_supplier_data)
                 doc = self.upload_contract_document(contract_data,
                                                     resource['id'],
                                                     contract['id'],
