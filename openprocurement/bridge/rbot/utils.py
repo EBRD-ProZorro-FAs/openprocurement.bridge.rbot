@@ -48,13 +48,16 @@ def prepare_proforma_data(resource,
                           supplier_data={},
                           bid_data={},
                           contract_data={}):
-    return {
-        "tender": resource,
-        "buyer": buyer_data,
-        "supplier": supplier_data,
-        "bid": bid_data,
-        "contract": contract_data
-    }
+    result = {"tender": "resource"}
+    if buyer_data:
+        result['buyer'] = buyer_data
+    if supplier_data:
+        result['supplier'] = buyer_data
+    if bid_data:
+        result['bid'] = bid_data
+    if contract_data:
+        result['contract'] = contract_data
+    return result
 
 
 def merge_contract_data(base, *rest):

@@ -112,6 +112,19 @@ class RendererBot(HandlerTemplate):
             return
         return docs[-1]
 
+    def validate_data(self, resource, data, schema):
+        try:
+            validate(data, schema)
+            return True
+        except ValidationError as e:
+            logger.info("Validation of proforma for role {} data in resource {}({}) failed with error {}".format(
+                data['role'],
+                resource['id'],
+                resource['procurementMethodType'],
+                e
+            ))
+            return False
+
     def process_resource(self, resource):
 
         contract_proforma = self.get_latest_doc(resource,
@@ -167,11 +180,13 @@ class RendererBot(HandlerTemplate):
                 resource['procurementMethodType'],
             ))
             template = self.get_file(template_doc['url'])
-            proforma_data = prepare_proforma_data(resource, buyer_data)
-            # TODO: validate
-            # schema = self.get_file_json(schema_doc['url'])
-            # if self.validate_contract_data(contract_data, scheme):
-            # TODO: this will not work for resources before active.awarded
+            proforma_data = prepare_proforma_data(resource,
+                                                  buyer_data=buyer_data)
+            proforma_data['role'] = 'process'
+            schema = self.get_file_json(schema_doc['url'])
+            
+            if not self.validate_data(resource, proforma_data, schema):
+                return
             contract_proforma_pdf = self.renderer.render(template,
                                                          proforma_data,
                                                          name=template_doc['title'])
@@ -221,15 +236,20 @@ class RendererBot(HandlerTemplate):
                 award = [a for a in resource.get('awards') if contract['awardID'] == a['id']][-1]
                 bid = [b for b in resource.get('bids') if b['id'] == award['bid_id']][-1]
                 supplier_data = self.get_document_content(bid, get_contract_data_documents)
-                
+                supplier_data['role'] = 'supplier'
+                supplier_data = supplier_data if self.validate_data(resource, supplier_data, schema) else {}
                 # {"supplier": {}, "buyer": {}}
                 bid_and_supplier_data = self.get_document_content(
                     award, get_contract_data_documents
                 )
+                bid_and_supplier_data['role'] = "buyerCorrigenda"
+                bid_and_supplier_data = bid_and_supplier_data\
+                    if self.validate_data(resource, bid_and_supplier_data, schema) else {}
                 contract_data = merge_contract_data(resource,
                                                     buyer_data,
-                                                    supplier_data,
-                                                    bid_and_supplier_data)
+                                                    supplier_data ,
+                                                    bid_and_supplier_data
+                                                    )
                 doc = self.upload_contract_document(contract_data,
                                                     resource['id'],
                                                     contract['id'],

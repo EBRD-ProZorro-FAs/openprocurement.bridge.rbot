@@ -14,7 +14,7 @@ class TestHttpRenderer(unittest.TestCase):
     def setUp(self):
         self.renderer = HttpRenderer(RENDERER_URL)
 
-    def test_render_ok(self):
+    def test_render_ok(
         data = CONTRACT_DATA
         with open(TEMPLATE_PATH, 'rb') as template:
             try:
