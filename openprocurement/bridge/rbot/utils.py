@@ -48,11 +48,11 @@ def prepare_proforma_data(resource,
                           supplier_data={},
                           bid_data={},
                           contract_data={}):
-    result = {"tender": "resource"}
+    result = {"tender": resource}
     if buyer_data:
         result['buyer'] = buyer_data
     if supplier_data:
-        result['supplier'] = buyer_data
+        result['supplier'] = supplier_data
     if bid_data:
         result['bid'] = bid_data
     if contract_data:
