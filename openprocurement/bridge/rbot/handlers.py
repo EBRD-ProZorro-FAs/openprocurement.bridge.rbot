@@ -54,6 +54,7 @@ class RendererBot(HandlerTemplate):
             'templateId': proforma_template['templateId'],
             'relatedItem': proforma_template['id'],
             'title': 'contractProforma.pdf',
+            'format': 'application/pdf',
             'documentOf': 'document'
         }
         return self.tender_client.upload_document(
@@ -68,7 +69,7 @@ class RendererBot(HandlerTemplate):
                                  title='contractData.json'):
         additional_doc_data = {
             'title': title,
-            'documentOf': 'document'
+            'documentOf': 'document',
         }
         if related_item:
             additional_doc_data['relatedItem'] = related_item
@@ -126,7 +127,6 @@ class RendererBot(HandlerTemplate):
             return False
 
     def process_resource(self, resource):
-
         contract_proforma = self.get_latest_doc(resource,
                                                 get_contract_proforma_documents,
                                                 "contractProforma")
@@ -160,7 +160,7 @@ class RendererBot(HandlerTemplate):
             buyer_data = self.get_file_json(data_doc['url'])
         except Exception as e:
             logger.info(
-                "Failed to parse contract data document in {} tender {} in {}. Skipping...".format(
+                "Failed to parse buyer contract data document in {} tender {} in {}. Skipping...".format(
                     resource['procurementMethodType'],
                     resource['id'],
                     resource['status'],
@@ -235,22 +235,24 @@ class RendererBot(HandlerTemplate):
             for contract in [c for c in resource.get('contracts') if c['status'] == 'pending']:
                 award = [a for a in resource.get('awards') if contract['awardID'] == a['id']][-1]
                 bid = [b for b in resource.get('bids') if b['id'] == award['bid_id']][-1]
-                supplier_data = self.get_document_content(bid, get_contract_data_documents)
+
+                supplier_data = self.get_document_content(bid, get_contract_data_documents, as_json=True)
                 supplier_data['role'] = 'supplier'
                 supplier_data = supplier_data if self.validate_data(resource, supplier_data, schema) else {}
                 # {"supplier": {}, "buyer": {}}
                 bid_and_supplier_data = self.get_document_content(
                     award, get_contract_data_documents
                 )
-                bid_and_supplier_data['role'] = "buyerCorrigenda"
-                bid_and_supplier_data = bid_and_supplier_data\
-                    if self.validate_data(resource, bid_and_supplier_data, schema) else {}
+                if bid_and_supplier_data:
+                    bid_and_supplier_data['role'] = "buyerCorrigenda"
+                    bid_and_supplier_data = bid_and_supplier_data\
+                        if self.validate_data(resource, bid_and_supplier_data, schema) else {}
                 contract_data = merge_contract_data(resource,
                                                     buyer_data,
                                                     supplier_data ,
                                                     bid_and_supplier_data
                                                     )
-                doc = self.upload_contract_document(contract_data,
+                doc = self.upload_contract_document(json.dumps(contract_data),
                                                     resource['id'],
                                                     contract['id'],
                                                     related_item=contract_proforma['id'])
@@ -273,7 +275,7 @@ class RendererBot(HandlerTemplate):
                                                     name=template_doc['title'])
                 if contract_pdf.status_code == 200:
                     result = self.upload_contract_document(
-                        contract_pdf,
+                        contract_pdf.content,
                         resource['id'],
                         contract['id'],
                         doc_type='contract',

@@ -50,9 +50,9 @@ def prepare_proforma_data(resource,
                           contract_data={}):
     result = {"tender": resource}
     if buyer_data:
-        result['buyer'] = buyer_data
+        result.update(buyer_data)
     if supplier_data:
-        result['supplier'] = supplier_data
+        result.update(supplier_data)
     if bid_data:
         result['bid'] = bid_data
     if contract_data:
@@ -64,5 +64,5 @@ def merge_contract_data(base, *rest):
     result = base
     for additional in rest:
         if additional:
-            result = Merger.merge(result, additional)
+            result = data_merger.merge(result, additional)
     return result
