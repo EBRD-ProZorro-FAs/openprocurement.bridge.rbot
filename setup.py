@@ -5,7 +5,6 @@ version = '1.0.1dp'
 
 requires = [
     'setuptools',
-    'openprocurement.bridge.basic',
     'tooz',
     'retrying',
     'jmespath',
