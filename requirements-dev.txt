@@ -2,6 +2,7 @@ git+https://github.com/ProzorroUKR/openprocurement.bridge.basic.git
 git+https://github.com/openprocurement/ProzorroUKR-openprocurement.client.python.git@feature/update_document#egg=openprocurement_client
 futurist==1.2.0
 munch==2.5.0
+jsonmerge==1.7.0
 pytest==4.6.9
 pytest-cov==2.8.1
 pytest-mock==2.0.0

@@ -10,6 +10,7 @@ requires = [
     'jmespath',
     'enum',
     'jsonschema',
+    'jsonmerge',
 ]
 
 test_requires = requires + [
