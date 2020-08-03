@@ -43,26 +43,5 @@ def get_contract_proforma_documents(resource, related_item=None):
     return _get_documents(resource, 'contractProforma', related_item=None)
 
 
-def prepare_proforma_data(resource,
-                          buyer_data={},
-                          supplier_data={},
-                          bid_data={},
-                          contract_data={}):
-    result = {"tender": resource}
-    if buyer_data:
-        result.update(buyer_data)
-    if supplier_data:
-        result.update(supplier_data)
-    if bid_data:
-        result['bid'] = bid_data
-    if contract_data:
-        result['contract'] = contract_data
-    return result
-
-
-def merge_contract_data(base, *rest):
-    result = base
-    for additional in rest:
-        if additional:
-            result = data_merger.merge(result, additional)
-    return result
+def get_contract_documents(resource, related_item=None):
+    return _get_documents(resource, 'contract', related_item=None)
