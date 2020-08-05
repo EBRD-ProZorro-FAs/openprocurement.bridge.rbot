@@ -55,20 +55,37 @@ class RendererBot(HandlerTemplate):
             )
         )
         additional_doc_data = {
-            'templateId': proforma_template['templateId'],
-            'relatedItem': proforma_template['id'],
-            'title': 'contractProforma.pdf',
             'format': 'application/pdf',
-            'documentOf': 'document'
+            'title': 'contractProforma.pdf',
+            'documentOf': 'tender',
+            'templateId': proforma_template['templateId']
         }
-        return self.tender_client.upload_document(
+        return self.tender_client.update_document(
             BytesIO(file_),
             resource['id'],
+            proforma_template['id'],
             doc_type='contractProforma',
             additional_doc_data=additional_doc_data
         )
 
     def upload_contract_document(self, file_, tender_id, contract_id,
+                                 related_item=None, doc_type='contractData',
+                                 title='contractData.json'):
+        additional_doc_data = {
+            'title': title,
+            'documentOf': 'document',
+        }
+        if related_item:
+            additional_doc_data['relatedItem'] = related_item
+        return self.tender_client.upload_document(
+            BytesIO(file_),
+            tender_id,
+            doc_type=doc_type,
+            additional_doc_data=additional_doc_data,
+            depth_path='{}/{}'.format('contracts', contract_id)
+        )
+
+    def update_contract_document(self, file_, tender_id, contract_id,
                                  related_item=None, doc_type='contractData',
                                  title='contractData.json'):
         additional_doc_data = {
@@ -94,24 +111,26 @@ class RendererBot(HandlerTemplate):
     def get_document_content(self, resource, getter, as_json=False):
         docs = getter(resource)
         if not docs:
-            return None
+            return {}
         downloader = self.get_file_json if as_json else self.get_file
         return downloader(docs[-1]['url'])
 
-    def get_latest_doc(self, resource, getter, msg):
+    def get_latest_doc(self, resource, getter, msg, tender=None):
         docs = getter(resource)
+        if not tender:
+            tender = resource
         if not docs:
             logger.info(
-                "{} tender {} in {} does not contain {}. Skipping...".format(
-                    resource['procurementMethodType'],
-                    resource['id'],
-                    resource['status'],
+                "{} tender {} in {} does not contain {}.".format(
+                    tender['procurementMethodType'],
+                    tender['id'],
+                    tender['status'],
                     msg
 
                 ),
                 extra=journal_context(
                     {"MESSAGE_ID": "SKIPPED"},
-                    params={"TENDER_ID": resource['id']}
+                    params={"TENDER_ID": tender['id']}
                 )
             )
             return
@@ -237,15 +256,16 @@ class RendererBot(HandlerTemplate):
             )
             return
         merger = Merger(schema)
+        template = self.get_file(template_doc['url'])
 
         # document still not rendered
-        if contract_proforma['dateModified'] < template_doc['dateModified']:
+        if contract_proforma['dateModified'] < template_doc['dateModified']\
+           and resource['status'] in ('active.tendering', 'active.enquiries'):
             logger.info("Rendering proforma document {} pdf of tender {}({})".format(
                 contract_proforma['id'],
                 resource['id'],
                 resource['procurementMethodType'],
             ))
-            template = self.get_file(template_doc['url'])
             proforma_data = merger.merge(
                 {'tender': resource},
                 {'buyer': buyer_data.get('buyer'), 'role': 'process', 'plan': plan}
@@ -265,7 +285,7 @@ class RendererBot(HandlerTemplate):
                                               contract_proforma)
         else:
             logger.info(
-                "{} tender {} in {} already contains contractProforma. Skipping...".format(
+                "{} tender {} in {} already contains contractProforma.".format(
                     resource['procurementMethodType'],
                     resource['id'],
                     resource['status'],
@@ -279,37 +299,52 @@ class RendererBot(HandlerTemplate):
 
         if resource['status'] == 'active.awarded':
             for contract in [c for c in resource.get('contracts') if c['status'] == 'pending']:
-                contract = self.get_latest_doc(resource,
-                                               get_contract_documents,
-                                               "contract")
-                if contract:
-                    logger.info('Cotract {} of tender {} already rendered'.format(contract['id'], resource['id']))
-                    continue
+                contract_doc = self.get_latest_doc(
+                    contract,
+                    get_contract_documents,
+                    "contract",
+                    tender=resource
+                )
+                buyer_corr_doc = self.get_latest_doc(
+                    contract,
+                    partial(get_contract_data_documents, related_item=contract_proforma['id']),
+                    "contractData",
+                    tender=resource
+                )
+                if contract_doc:
+                    # check in contract is up to date
+                    if buyer_corr_doc.get('dateModified', '') < contract_doc['dateModified']:
+                        logger.info('Cotract {} of tender {} already rendered'.format(contract['id'], resource['id']))
+                        continue
+
                 award = [a for a in resource.get('awards') if contract['awardID'] == a['id']][-1]
                 bid = [b for b in resource.get('bids') if b['id'] == award['bid_id']][-1]
 
-                supplier_data = self.get_document_content(bid, get_contract_data_documents, as_json=True)
-                supplier_data['role'] = 'supplier'
-                if not self.validate_data(resource, supplier_data, schema):
-                    logger.warn('Supplier data in tender {} does not satisfy schema'.format(resource['id']))
-                    supplier_data = {}
-
                 # {"supplier": {}, "buyer": {}}
                 bid_and_supplier_data = self.get_document_content(
-                    award, get_contract_data_documents
+                    contract, get_contract_data_documents, as_json=True
                 )
-                bid_and_supplier_data['role'] = "buyerCorrigenda"
-                if not self.validate_data(resource, bid_and_supplier_data, schema):
-                    logger.warn('BuyerCorrigenda data in tender {} does not satisfy schema'.format(resource['id']))
-                    bid_and_supplier_data = {}
+                if bid_and_supplier_data:
+                    bid_and_supplier_data['role'] = "buyerCorrigenda"
+                    if not self.validate_data(resource, bid_and_supplier_data, schema):
+                        logger.warn('BuyerCorrigenda data in tender {} does not satisfy schema'.format(resource['id']))
+                
+                supplier_data = self.get_document_content(bid, get_contract_data_documents, as_json=True)
+                if supplier_data:
+                    supplier_data['role'] = 'supplier'
+                    if not self.validate_data(resource, supplier_data, schema):
+                        logger.warn('Supplier data in tender {} does not satisfy schema'.format(resource['id']))
+                        supplier_data = {}
+
                 contract_data = {'tender': resource}
                 to_merge = [{'plan': plan}, buyer_data, supplier_data, bid_and_supplier_data, bid_and_supplier_data]
                 for data in to_merge:
-                    contract_data = merger.merge(data)
+                    contract_data = merger.merge(contract_data, data)
                 contract_data['role'] = 'process'
                 if not self.validate_data(resource, contract_data, schema):
                     logger.error('Contract data in tender {} does not satisfy schema'.format(resource['id']))
                     return
+
                 doc = self.upload_contract_document(json.dumps(contract_data),
                                                     resource['id'],
                                                     contract['id'],
