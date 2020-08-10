@@ -68,8 +68,12 @@ class RendererBot(HandlerTemplate):
             additional_doc_data=additional_doc_data
         )
 
-    def upload_contract_document(self, file_, tender_id, contract_id,
-                                 related_item=None, doc_type='contractData',
+    def upload_contract_document(self,
+                                 file_,
+                                 tender_id,
+                                 contract_id,
+                                 related_item=None,
+                                 doc_type='contractData',
                                  title='contractData.json'):
         additional_doc_data = {
             'title': title,
@@ -85,18 +89,23 @@ class RendererBot(HandlerTemplate):
             depth_path='{}/{}'.format('contracts', contract_id)
         )
 
-    def update_contract_document(self, file_, tender_id, contract_id,
-                                 related_item=None, doc_type='contractData',
+    def update_contract_document(self,
+                                 file_,
+                                 tender_id,
+                                 contract_id,
+                                 document,
+                                 doc_type='contractData',
                                  title='contractData.json'):
         additional_doc_data = {
-            'title': title,
-            'documentOf': 'document',
+            'title': document['title'],
+            'documentOf': document['documentOf'],
         }
-        if related_item:
-            additional_doc_data['relatedItem'] = related_item
-        return self.tender_client.upload_document(
+        if document.get('relatedItem'):
+            additional_doc_data['relatedItem'] = document['relatedItem']
+        return self.tender_client.update_document(
             BytesIO(file_),
             tender_id,
+            document['id'],
             doc_type=doc_type,
             additional_doc_data=additional_doc_data,
             depth_path='{}/{}'.format('contracts', contract_id)
@@ -344,11 +353,16 @@ class RendererBot(HandlerTemplate):
                 if not self.validate_data(resource, contract_data, schema):
                     logger.error('Contract data in tender {} does not satisfy schema'.format(resource['id']))
                     return
-
-                doc = self.upload_contract_document(json.dumps(contract_data),
-                                                    resource['id'],
-                                                    contract['id'],
-                                                    related_item=contract_proforma['id'])
+                if buyer_corr_doc:
+                    doc = self.update_contract_document(json.dumps(contract_data),
+                                                        resource['id'],
+                                                        contract['id'],
+                                                        buyer_corr_doc)
+                else:
+                    doc = self.upload_contract_document(json.dumps(contract_data),
+                                                        resource['id'],
+                                                        contract['id'],
+                                                        related_item=contract_proforma['id'])
                 if doc.get('status', '') == 'error':
                     logger.error('Failed to uploaded contractData document to tender {} contract {} with errors: {}'.format(
                         resource['id'],
