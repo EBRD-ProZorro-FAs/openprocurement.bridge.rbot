@@ -383,10 +383,12 @@ class RendererBot(HandlerTemplate):
                                                     contract_data,
                                                     name=title)
                 if contract_pdf.status_code == 200:
+                    import pdb; pdb.set_trace()
                     result = self.upload_contract_document(
                         contract_pdf.content,
                         resource['id'],
                         contract['id'],
+                        related_item=contract_proforma['id'],
                         doc_type='contract',
                         title='contract.pdf'
                         )
