@@ -52,6 +52,13 @@ class RendererBot(HandlerTemplate):
             "Update contract proforma document {} of tender {}".format(
                 proforma_template['id'],
                 resource['id']
+            ),
+            extra=journal_context(
+                {"MESSAGE_ID": "DOCUMENT_UPDATE"},
+                params={
+                    "TENDER_ID": resource['id'],
+                    "PROFORMA_ID": proforma_template['id']
+                }
             )
         )
         additional_doc_data = {
@@ -78,9 +85,8 @@ class RendererBot(HandlerTemplate):
         additional_doc_data = {
             'title': title,
             'documentOf': 'document',
+            'relatedItem': related_item
         }
-        if related_item:
-            additional_doc_data['relatedItem'] = related_item
         return self.tender_client.upload_document(
             BytesIO(file_),
             tender_id,
@@ -99,9 +105,8 @@ class RendererBot(HandlerTemplate):
         additional_doc_data = {
             'title': document['title'],
             'documentOf': document['documentOf'],
+            'relatedItem': document['relatedItem']
         }
-        if document.get('relatedItem'):
-            additional_doc_data['relatedItem'] = document['relatedItem']
         return self.tender_client.update_document(
             BytesIO(file_),
             tender_id,
@@ -138,7 +143,7 @@ class RendererBot(HandlerTemplate):
 
                 ),
                 extra=journal_context(
-                    {"MESSAGE_ID": "SKIPPED"},
+                    {"MESSAGE_ID": "MISSING"},
                     params={"TENDER_ID": tender['id']}
                 )
             )
@@ -150,12 +155,18 @@ class RendererBot(HandlerTemplate):
             validate(data, schema)
             return True
         except ValidationError as e:
-            logger.info("Validation of proforma for role {} data in resource {}({}) failed with error {}".format(
-                data['role'],
-                resource['id'],
-                resource['procurementMethodType'],
-                e
-            ))
+            logger.warn(
+                "Validation of proforma for role {} data in resource {}({}) failed with error {}".format(
+                    data['role'],
+                    resource['id'],
+                    resource['procurementMethodType'],
+                    e
+                ),
+                extra=journal_context(
+                    {"MESSAGE_ID": "VALIDATION"},
+                    params={"TENDER_ID": resource['id']}
+                )
+            )
             return False
 
     def get_plan(self, plan_id):
@@ -169,30 +180,60 @@ class RendererBot(HandlerTemplate):
                                                      proforma_data,
                                                      name=title)
         if contract_proforma_pdf.status_code == 200:
-            result = self.upload_contract_proforma(resource,
-                                                   contract_proforma,
-                                                   contract_proforma_pdf.content)
-            if result.get('status', '') == 'error':
-                logger.error('Failed to uploaded contractProforma document to tender {} with errors: {}'.format(
-                    resource['id'],
-                    result.errors
-                ))
+            try:
+                result = self.upload_contract_proforma(resource,
+                                                       contract_proforma,
+                                                       contract_proforma_pdf.content)
+            except Exception as e:
+                logger.error(
+                    'Failed to uploaded contractProforma {} document to tender {} with errors: {}'.format(
+                        resource['id'],
+                        template_doc['relatedItem'],
+                        e
+                    ),
+                    extra=journal_context(
+                        {"MESSAGE_ID": "UPLOAD"},
+                        params={
+                            "TENDER_ID": resource['id'],
+                            "PROFORMA_ID": template_doc['relatedItem']
+                        }
+                    )
+                )
             else:
-                logger.info('Uploaded contractProforma document {} for proforma template {} to tender {}({})'.format(
-                    result.data.id,
-                    template_doc['relatedItem'],
-                    resource['id'],
-                    resource['procurementMethodType'])
+                logger.info(
+                    'Uploaded contractProforma document {} for proforma template {} to tender {}({})'.format(
+                        result.data.id,
+                        template_doc['relatedItem'],
+                        resource['id'],
+                        resource['procurementMethodType']
+                    ),
+                    extra=journal_context(
+                        {"MESSAGE_ID": "UPLOAD"},
+                        params={
+                            "TENDER_ID": resource['id'],
+                            "PROFORMA_ID": template_doc['relatedItem']
+                        }
+                    )
                 )
         else:
             try:
                 msg = contract_proforma_pdf.json()['error']['message']
             except:
                 msg = contract_proforma_pdf.text
-                logger.error('Failed to render contractProforma document to tender {} with errors: {}'.format(
+            logger.error(
+                'Failed to render contractProforma {} document to tender {} with errors: {}'.format(
+                    template_doc['relatedItem'],
                     resource['id'],
                     msg
-                ))
+                ),
+                extra=journal_context(
+                    {"MESSAGE_ID": "RENDER"},
+                    params={
+                        "TENDER_ID": resource['id'],
+                        "PROFORMA_ID": template_doc['relatedItem']
+                    }
+                )
+            )
 
     def process_resource(self, resource):
         contract_proforma = self.get_latest_doc(resource,
@@ -235,17 +276,30 @@ class RendererBot(HandlerTemplate):
                 ),
                 extra=journal_context(
                     {"MESSAGE_ID": "SKIPPED"},
-                    params={"TENDER_ID": resource['id']}
+                    params={
+                        "TENDER_ID": resource['id'],
+                        'DOCUMENT_ID': data_doc['url'],
+                        "PROFORMA_ID": contract_proforma['id']
+                    }
                 )
             )
             return
 
         plans = resource.get('plans')
         if not plans:
-            logger.error("Error rendering contract proforma. No plan in tender {}({})".format(
-                resource['id'],
-                resource['procurementMethodType'],
-            ))
+            logger.error(
+                "Error rendering contract proforma. No plan in tender {}({})".format(
+                    resource['id'],
+                    resource['procurementMethodType'],
+                ),
+                extra=journal_context(
+                    {"MESSAGE_ID": "SKIPPED"},
+                    params={
+                        "TENDER_ID": resource['id'],
+                        "PROFORMA_ID": contract_proforma['id']
+                    }
+                )
+            )
             return
         plan = self.get_plan(plans[0].id)['data']
 
@@ -260,7 +314,11 @@ class RendererBot(HandlerTemplate):
                 ),
                 extra=journal_context(
                     {"MESSAGE_ID": "SKIPPED"},
-                    params={"TENDER_ID": resource['id']}
+                    params={
+                        "TENDER_ID": resource['id'],
+                        'DOCUMENT_ID': data_doc['url'],
+                        "PROFORMA_ID": contract_proforma['id']
+                    }
                 )
             )
             return
@@ -270,22 +328,40 @@ class RendererBot(HandlerTemplate):
         # document still not rendered
         if contract_proforma['dateModified'] < template_doc['dateModified']\
            and resource['status'] in ('active.tendering', 'active.enquiries'):
-            logger.info("Rendering proforma document {} pdf of tender {}({})".format(
-                contract_proforma['id'],
-                resource['id'],
-                resource['procurementMethodType'],
-            ))
+            logger.info(
+                "Rendering proforma document {} pdf of tender {}({})".format(
+                    contract_proforma['id'],
+                    resource['id'],
+                    resource['procurementMethodType'],
+                ),
+                extra=journal_context(
+                    {"MESSAGE_ID": "PROFORMA"},
+                    params={
+                        "TENDER_ID": resource['id'],
+                        "PROFORMA_ID": contract_proforma['id']
+                    }
+                )
+            )
             proforma_data = merger.merge(
                 {'tender': resource},
                 {'buyer': buyer_data.get('buyer'), 'role': 'process', 'plan': plan}
             )
 
             if not self.validate_data(resource, proforma_data, schema):
-                logger.info("Provided data for rendering is not valid for proforma {} in tender {}({})".format(
-                    contract_proforma['id'],
-                    resource['id'],
-                    resource['procurementMethodType'],
-                ))
+                logger.warn(
+                    "Provided data for rendering is not valid for proforma {} in tender {}({})".format(
+                        contract_proforma['id'],
+                        resource['id'],
+                        resource['procurementMethodType'],
+                    ),
+                    extra=journal_context(
+                        {"MESSAGE_ID": "VALIDATION"},
+                        params={
+                            "TENDER_ID": resource['id'],
+                            "PROFORMA_ID": contract_proforma['id']
+                        }
+                    )
+                )
                 return
             self.generate_and_upload_proforma(resource,
                                               template,
@@ -302,7 +378,10 @@ class RendererBot(HandlerTemplate):
                 ),
                 extra=journal_context(
                     {"MESSAGE_ID": "SKIPPED"},
-                    params={"TENDER_ID": resource['id']}
+                    params={
+                        "TENDER_ID": resource['id'],
+                        "PROFORMA_ID": contract_proforma['id']
+                    }
                 )
             )
 
@@ -323,7 +402,17 @@ class RendererBot(HandlerTemplate):
                 if contract_doc:
                     # check in contract is up to date
                     if buyer_corr_doc.get('dateModified', '') < contract_doc['dateModified']:
-                        logger.info('Contract {} of tender {} already rendered'.format(contract['id'], resource['id']))
+                        logger.info(
+                            'Contract {} of tender {} already rendered'.format(contract['id'], resource['id']),
+                            extra=journal_context(
+                                {"MESSAGE_ID": "SKIPPED"},
+                                params={
+                                    "TENDER_ID": resource['id'],
+                                    "PROFORMA_ID": contract_proforma['id'],
+                                    "CONTRACT_ID": contract['id']
+                                }
+                            )
+                        )
                         continue
 
                 award = [a for a in resource.get('awards') if contract['awardID'] == a['id']][-1]
@@ -336,13 +425,33 @@ class RendererBot(HandlerTemplate):
                 if bid_and_supplier_data:
                     bid_and_supplier_data['role'] = "buyerCorrigenda"
                     if not self.validate_data(resource, bid_and_supplier_data, schema):
-                        logger.warn('BuyerCorrigenda data in tender {} does not satisfy schema'.format(resource['id']))
+                        logger.warn(
+                            'BuyerCorrigenda data in tender {} does not satisfy schema'.format(resource['id']),
+                            extra=journal_context(
+                                {"MESSAGE_ID": "VALIDATION"},
+                                params={
+                                    "TENDER_ID": resource['id'],
+                                    "CONTRACT_ID": contract['id'],
+                                    "PROFORMA_ID": contract_proforma['id']
+                                }
+                            )
+                        )
                 
                 supplier_data = self.get_document_content(bid, get_contract_data_documents, as_json=True)
                 if supplier_data:
                     supplier_data['role'] = 'supplier'
                     if not self.validate_data(resource, supplier_data, schema):
-                        logger.warn('Supplier data in tender {} does not satisfy schema'.format(resource['id']))
+                        logger.warn(
+                            'Supplier data in tender {} does not satisfy schema'.format(resource['id']),
+                            extra=journal_context(
+                                {"MESSAGE_ID": "VALIDATION"},
+                                params={
+                                    "TENDER_ID": resource['id'],
+                                    "CONTRACT_ID": contract['id'],
+                                    "PROFORMA_ID": contract_proforma['id']
+                                }
+                            )
+                        )
                         supplier_data = {}
 
                 contract_data = {'tender': resource}
@@ -359,30 +468,61 @@ class RendererBot(HandlerTemplate):
                 for data in to_merge:
                     contract_data = merger.merge(contract_data, data)
                 if not self.validate_data(resource, contract_data, schema):
-                    logger.error('Contract data in tender {} does not satisfy schema'.format(resource['id']))
+                    logger.error(
+                        'Contract data in tender {} does not satisfy schema'.format(resource['id']),
+                        extra=journal_context(
+                            {"MESSAGE_ID": "VALIDATION"},
+                            params={
+                                "TENDER_ID": resource['id'],
+                                "CONTRACT_ID": contract['id'],
+                                "PROFORMA_ID": contract_proforma['id']
+                            }
+                        )
+                    )
                     return
-                if buyer_corr_doc:
-                    doc = self.update_contract_document(json.dumps(contract_data),
-                                                        resource['id'],
-                                                        contract['id'],
-                                                        buyer_corr_doc)
+                try:
+                    if buyer_corr_doc:
+                        doc = self.update_contract_document(json.dumps(contract_data),
+                                                            resource['id'],
+                                                            contract['id'],
+                                                            buyer_corr_doc)
+                    else:
+                        doc = self.upload_contract_document(json.dumps(contract_data),
+                                                            resource['id'],
+                                                            contract['id'],
+                                                            related_item=contract_proforma['id'])
+                except Exception as e:
+                    logger.error(
+                        'Failed to uploaded contractData document to tender {} contract {} with errors: {}'.format(
+                            resource['id'],
+                            contract['id'],
+                            e
+                        ),
+                        extra=journal_context(
+                            {"MESSAGE_ID": "UPLOAD"},
+                            params={
+                                "TENDER_ID": resource['id'],
+                                "CONTRACT_ID": contract['id'],
+                                "PROFORMA_ID": contract_proforma['id']
+                            }
+                        )
+                    )
                 else:
-                    doc = self.upload_contract_document(json.dumps(contract_data),
-                                                        resource['id'],
-                                                        contract['id'],
-                                                        related_item=contract_proforma['id'])
-                if doc.get('status', '') == 'error':
-                    logger.error('Failed to uploaded contractData document to tender {} contract {} with errors: {}'.format(
-                        resource['id'],
-                        contract['id'],
-                        doc.errors
-                    ))
-                else:
-                    logger.info('Uploaded contractData document {} to contract {} of tender {}({})'.format(
-                        doc.data.id,
-                        contract['id'],
-                        resource['id'],
-                        resource['procurementMethodType'])
+                    logger.info(
+                        'Uploaded contractData document {} to contract {} of tender {}({})'.format(
+                            doc.data.id,
+                            contract['id'],
+                            resource['id'],
+                            resource['procurementMethodType']
+                        ),
+                        extra=journal_context(
+                            {"MESSAGE_ID": "UPLOAD"},
+                            params={
+                                "TENDER_ID": resource['id'],
+                                "CONTRACT_ID": contract['id'],
+                                "PROFORMA_ID": contract_proforma['id']
+                            }
+                        )
                     )
                 title = template_doc['title']
                 if not title.endswith('docx'):
@@ -391,33 +531,64 @@ class RendererBot(HandlerTemplate):
                                                     contract_data,
                                                     name=title)
                 if contract_pdf.status_code == 200:
-                    result = self.upload_contract_document(
-                        contract_pdf.content,
-                        resource['id'],
-                        contract['id'],
-                        related_item=contract_proforma['id'],
-                        doc_type='contract',
-                        title='contract.pdf'
+                    try:
+                        result = self.upload_contract_document(
+                            contract_pdf.content,
+                            resource['id'],
+                            contract['id'],
+                            related_item=contract_proforma['id'],
+                            doc_type='contract',
+                            title='contract.pdf'
                         )
-                    if result.get('status', '') == 'error':
-                        logger.error('Failed to uploaded contract to tender {} with errors: {}'.format(
-                            resource['id'],
-                            result.errors
-                        ))
+                    except Exception as e:
+                        logger.error(
+                            'Failed to uploaded contract to tender {} with errors: {}'.format(
+                                resource['id'],
+                                e
+                            ),
+                            extra=journal_context(
+                                {"MESSAGE_ID": "UPLOAD"},
+                                params={
+                                    "TENDER_ID": resource['id'],
+                                    "CONTRACT_ID": contract['id'],
+                                    "PROFORMA_ID": contract_proforma['id']
+                                }
+                            )
+                        )
                     else:
-                        logger.info('Uploaded contract document {} for proforma template {} to tender {}({})'.format(
-                            result.data.id,
-                            contract_proforma['id'],
-                            resource['id'],
-                            resource['procurementMethodType'])
+                        logger.info(
+                            'Uploaded contract document {} for proforma template {} to tender {}({})'.format(
+                                result.data.id,
+                                contract_proforma['id'],
+                                resource['id'],
+                                resource['procurementMethodType']
+                            ),
+                            extra=journal_context(
+                                {"MESSAGE_ID": "UPLOAD"},
+                                params={
+                                    "TENDER_ID": resource['id'],
+                                    "CONTRACT_ID": contract['id'],
+                                    "PROFORMA_ID": contract_proforma['id']
+                                }
+                            )
                         )
                 else:
                     try:
                         msg = contract_pdf.json()['error']['message']
                     except:
                         msg = contract_pdf.text
-                    logger.error('Failed to render contractProforma document to tender {} with errors: {}'.format(
-                        resource['id'],
-                        msg
-                    ))
+                    logger.error(
+                        'Failed to render contractProforma document to tender {} with errors: {}'.format(
+                            resource['id'],
+                            msg
+                        ),
+                        extra=journal_context(
+                            {"MESSAGE_ID": "RENDER"},
+                            params={
+                                "TENDER_ID": resource['id'],
+                                "CONTRACT_ID": contract['id'],
+                                "PROFORMA_ID": contract_proforma['id']
+                            }
+                        )
+                    )
                     return
