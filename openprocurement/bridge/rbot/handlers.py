@@ -346,10 +346,18 @@ class RendererBot(HandlerTemplate):
                         supplier_data = {}
 
                 contract_data = {'tender': resource}
-                to_merge = [{'plan': plan}, buyer_data, supplier_data, bid_and_supplier_data, bid_and_supplier_data]
+                to_merge = [
+                    {'plan': plan},
+                    {'contract': contract},
+                    {'bid': bid},
+                    buyer_data,
+                    supplier_data,
+                    bid_and_supplier_data,
+                    bid_and_supplier_data,
+                    {'role': 'process'}
+                ]
                 for data in to_merge:
                     contract_data = merger.merge(contract_data, data)
-                contract_data['role'] = 'process'
                 if not self.validate_data(resource, contract_data, schema):
                     logger.error('Contract data in tender {} does not satisfy schema'.format(resource['id']))
                     return
