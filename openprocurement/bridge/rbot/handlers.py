@@ -376,10 +376,12 @@ class RendererBot(HandlerTemplate):
                         resource['id'],
                         resource['procurementMethodType'])
                     )
-
+                title = template_doc['title']
+                if not title.endswith('docx'):
+                    title = '{}.docx'.format(template_doc['title'])
                 contract_pdf = self.renderer.render(template,
                                                     contract_data,
-                                                    name=template_doc['title'])
+                                                    name=title)
                 if contract_pdf.status_code == 200:
                     result = self.upload_contract_document(
                         contract_pdf.content,
