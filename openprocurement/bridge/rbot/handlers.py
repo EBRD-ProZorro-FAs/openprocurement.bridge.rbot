@@ -323,7 +323,7 @@ class RendererBot(HandlerTemplate):
                 if contract_doc:
                     # check in contract is up to date
                     if buyer_corr_doc.get('dateModified', '') < contract_doc['dateModified']:
-                        logger.info('Cotract {} of tender {} already rendered'.format(contract['id'], resource['id']))
+                        logger.info('Contract {} of tender {} already rendered'.format(contract['id'], resource['id']))
                         continue
 
                 award = [a for a in resource.get('awards') if contract['awardID'] == a['id']][-1]
