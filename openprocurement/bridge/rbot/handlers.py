@@ -408,8 +408,8 @@ class RendererBot(HandlerTemplate):
                         msg = contract_pdf.json()['error']['message']
                     except:
                         msg = contract_pdf.text
-                        logger.error('Failed to render contractProforma document to tender {} with errors: {}'.format(
-                            resource['id'],
-                            msg
-                        ))
-                        return
+                    logger.error('Failed to render contractProforma document to tender {} with errors: {}'.format(
+                        resource['id'],
+                        msg
+                    ))
+                    return
