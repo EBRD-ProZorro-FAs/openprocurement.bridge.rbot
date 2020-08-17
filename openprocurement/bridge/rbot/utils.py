@@ -1,15 +1,3 @@
-from deepmerge import Merger
-
-data_merger = Merger(
-    [
-        (list, ["override"]),
-        (dict, ["merge"])
-    ],
-    ["override"],
-    ["override"]
-)
-
-
 def _get_documents(resource, doc_type, related_item=None):
     if related_item:
         return [
@@ -45,3 +33,10 @@ def get_contract_proforma_documents(resource, related_item=None):
 
 def get_contract_documents(resource, related_item=None):
     return _get_documents(resource, 'contract', related_item=None)
+
+
+def prepare_title(doc):
+    title = doc['title']
+    if not title.endswith('docx'):
+        title = '{}.docx'.format(title)
+    return title
