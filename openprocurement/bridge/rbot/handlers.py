@@ -323,7 +323,7 @@ class RendererBot(HandlerTemplate):
         template_doc = self.get_latest_doc(
             resource,
             partial(get_contract_template_documents, related_item=contract_proforma['id']),
-            "contractSchema"
+            "contractTemplate"
         )
         if not (data_doc and schema_doc and template_doc):
             return

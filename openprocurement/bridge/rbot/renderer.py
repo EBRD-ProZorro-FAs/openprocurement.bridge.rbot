@@ -19,7 +19,8 @@ class HttpRenderer(object):
         return self.session.post(
             self.base_url,
             data={
-                'json_data': json.dumps(json_data)
+                'json_data': json.dumps(json_data),
+                'include_attachments': True
             },
             files={'template': template}
         )
