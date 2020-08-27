@@ -242,7 +242,12 @@ class RendererBot(HandlerTemplate):
     def get_plan(self, plan_id):
         return self.plans_client.get_resource_item(plan_id)
 
-    def generate_and_upload_proforma(self, resource, template, template_doc, proforma_data, contract_proforma):
+    def generate_and_upload_proforma(self,
+                                     resource,
+                                     template,
+                                     template_doc,
+                                     proforma_data,
+                                     contract_proforma):
         title = prepare_title(template_doc)
         contract_proforma_pdf = self.renderer.render(template,
                                                      proforma_data,
@@ -448,9 +453,9 @@ class RendererBot(HandlerTemplate):
                     }
                 )
             )
-
         if resource['status'] == 'active.awarded':
             for contract in [c for c in resource.get('contracts') if c['status'] == 'pending']:
+
                 contract_doc = self.get_latest_doc(
                     contract,
                     get_contract_documents,
@@ -549,7 +554,7 @@ class RendererBot(HandlerTemplate):
                         resource['id'],
                         contract['id'],
                         doc_id=contract_data_doc.get('id'),
-                        document_of='contract',
+                        document_of='document',
                         related_item=contract_pdf_doc.data.id,
                         doc_type='contractData',
                         title='contractData.json'
