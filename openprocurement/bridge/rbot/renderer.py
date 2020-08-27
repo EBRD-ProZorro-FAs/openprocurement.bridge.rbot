@@ -20,7 +20,7 @@ class HttpRenderer(object):
             self.base_url,
             data={
                 'json_data': json.dumps(json_data),
-                'include_attachments': 'True'
+                'include_attachments': 'True',
             },
             files={'template': template}
         )
