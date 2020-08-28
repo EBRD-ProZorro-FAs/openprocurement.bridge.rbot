@@ -475,21 +475,21 @@ class RendererBot(HandlerTemplate):
                     tender=resource
                 )
 
-                # if contract_doc:
-                #     # check in contract is up to date
-                #     if buyer_corr_doc.get('dateModified', '') < contract_doc['dateModified']:
-                #         logger.info(
-                #             'Contract {} of tender {} already rendered'.format(contract['id'], resource['id']),
-                #             extra=journal_context(
-                #                 {"MESSAGE_ID": "SKIPPED"},
-                #                 params={
-                #                     "TENDER_ID": resource['id'],
-                #                     "PROFORMA_ID": contract_proforma['id'],
-                #                     "CONTRACT_ID": contract['id']
-                #                 }
-                #             )
-                #         )
-                #         continue
+                if contract_doc:
+                    # check in contract is up to date
+                    if buyer_corr_doc.get('dateModified', '') < contract_doc['dateModified']:
+                        logger.info(
+                            'Contract {} of tender {} already rendered'.format(contract['id'], resource['id']),
+                            extra=journal_context(
+                                {"MESSAGE_ID": "SKIPPED"},
+                                params={
+                                    "TENDER_ID": resource['id'],
+                                    "PROFORMA_ID": contract_proforma['id'],
+                                    "CONTRACT_ID": contract['id']
+                                }
+                            )
+                        )
+                        continue
 
                 award = [a for a in resource.get('awards') if contract['awardID'] == a['id']][-1]
                 bid = [b for b in resource.get('bids') if b['id'] == award['bid_id']][-1]
