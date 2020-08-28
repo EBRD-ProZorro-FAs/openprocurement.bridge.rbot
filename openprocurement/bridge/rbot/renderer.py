@@ -12,15 +12,16 @@ class HttpRenderer(object):
         self.base_url = url
 
     def render(self, template, json_data, name=None):
+        data = {
+            'json_data': json.dumps(json_data),
+            'include_attachments': 'true'
+        }
         if name:
             return self.session.post(self.base_url,
-                                     data={'json_data': json.dumps(json_data)},
+                                     data=data,
                                      files={'template': (name, template)})
         return self.session.post(
             self.base_url,
-            data={
-                'json_data': json.dumps(json_data),
-                'include_attachments': 'True',
-            },
+            data=data,
             files={'template': template}
         )
